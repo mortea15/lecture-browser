@@ -1,7 +1,8 @@
-doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+extends base
+include ../node_modules/pug-bootstrap/components/navbar
+
+block content
+  +navbar-fixed('Lecture Browser', 'inverse')
+    +nav_item('/', active) Home
+    +nav_item('/courses') Courses
+    +nav_item('/lectures') Lectures
