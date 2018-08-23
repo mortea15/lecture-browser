@@ -1,0 +1,21 @@
+extends layout
+
+include ../node_modules/pug-bootstrap/components/tabs
+include ../node_modules/pug-bootstrap/components/forms
+include ../node_modules/pug-bootstrap/components/list-groups
+
+append content
+  h1 All Lectures
+  if message
+    h4(style='color:red') #{message}
+  +list-group-custom()
+    if lectures
+      for lecture, i in lectures
+        if i == 0
+          +list-group-item('/lectures/' + lecture.course + '/' + lecture.id, 'true')
+            h4.list-group-item-heading=lecture.course + ' - ' + lecture.title + ' (' + lecture.date + ')'
+            p.list-group-item-text=lecture.preview
+        else
+          +list-group-item('/lectures/' + lecture.course + '/' + lecture.id)
+            h4.list-group-item-heading=lecture.course + ' - ' + lecture.title + ' (' + lecture.date + ')'
+            p.list-group-item-text=lecture.preview
