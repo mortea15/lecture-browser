@@ -1,0 +1,24 @@
+extends layout
+
+include ../node_modules/pug-bootstrap/components/tabs
+include ../node_modules/pug-bootstrap/components/forms
+include ../node_modules/pug-bootstrap/components/list-groups
+include ../node_modules/pug-bootstrap/components/icons
+
+append content
+  h4=lecture.course + ' - ' + lecture.date
+  if message
+    h4(style='color:red') #{message}
+  div!=md(lecture.notes)
+
+  br
+  div
+    center
+      if lecture.id < 2
+        a(class='icon-btn', href='#')
+          +icon-btn('menu-left')
+      else
+        a(class='icon-btn', href=`/lectures/${lecture.course}/${lecture.id - 1}`)
+          +icon-btn('menu-left')
+      a(class='icon-btn', href=`/lectures/${lecture.course}/${lecture.id + 1}`)
+        +icon-btn('menu-right')
