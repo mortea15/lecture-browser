@@ -1,9 +1,9 @@
 {
-  "name": "demo",
-  "version": "0.0.0",
+  "name": "lecture-browser",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "nodemon ./bin/www",
     "test": "mocha"
   },
   "dependencies": {
@@ -12,7 +12,9 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
-    "pug": "2.0.0-beta11"
+    "node-markdown": "^0.1.1",
+    "pug": "2.0.0-beta11",
+    "pug-bootstrap": "0.0.15"
   },
   "devDependencies": {
     "mocha": "^5.1.1",
