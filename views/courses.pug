@@ -1,0 +1,37 @@
+extends layout
+
+include ../node_modules/pug-bootstrap/components/tabs
+include ../node_modules/pug-bootstrap/components/forms
+include ../node_modules/pug-bootstrap/components/list-groups
+
+append content
+  h1 Courses
+  if message
+    h4(style='color:red') #{message}
+  +tab-list(courseNames, 0)
+    for course, i in courses
+      if i == 1
+        +tab(course.course, 'active')
+          h2 Lectures
+          +list-group-custom()
+            for lecture in course.lectures
+              if lecture.id == 1
+                +list-group-item('/lectures/' + course.course + '/' + lecture.id, 'true')
+                  h4.list-group-item-heading=lecture.title + ' (' + lecture.date + ')'
+                  p.list-group-item-text=lecture.preview
+              else
+                +list-group-item('/lectures/' + course.course + '/' + lecture.id)
+                  h4.list-group-item-heading=lecture.title + ' (' + lecture.date + ')'
+                  p.list-group-item-text=lecture.preview
+        +tab(course.course)
+          h2 Lectures
+          +list-group-custom()
+            for lecture in course.lectures
+              if lecture.id == 1
+                +list-group-item('/lectures/' + course.course + '/' + lecture.id, 'true')
+                  h4.list-group-item-heading=lecture.title + ' (' + lecture.date + ')'
+                  p.list-group-item-text=lecture.preview
+              else
+                +list-group-item('/lectures/' + course.course + '/' + lecture.id)
+                  h4.list-group-item-heading=lecture.title + ' (' + lecture.date + ')'
+                  p.list-group-item-text=lecture.preview
