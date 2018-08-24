@@ -64,3 +64,6 @@ typings/
 
 # linters
 .eslintrc.yml
+
+# uploads
+public/notes/
