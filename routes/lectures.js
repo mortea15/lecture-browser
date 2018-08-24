@@ -2,7 +2,6 @@ var express = require('express')
 var router = express.Router()
 var md = require('node-markdown').Markdown
 var mongoose = require('mongoose')
-var multer = require('multer')
 
 const config = require('../config')
 const LectureSchema = require('../schemas/lecture')
@@ -11,6 +10,23 @@ const CourseSchema = require('../schemas/course')
 const Course = mongoose.model('Course', CourseSchema)
 
 var dateConverter = require('../helpers/dateconverter')
+
+/* GET upload page. */
+router.get('/upload', function (req, res, next) {
+  mongoose.connect(config.dbstring)
+    .catch((err) => {
+      console.log('DB connection error', err)
+    })
+
+  Course.find({}, function (err, courses) {
+    if (err) {
+      console.log({ success: false, message: 'An error occurred', err })
+      res.json({ success: false, message: 'An error occurred while connecting to the database', err })
+    } else {
+      res.render('upload', { title: 'Upload Notes', courses: courses })
+    }
+  })
+})
 
 /* GET lectures listing. */
 router.get('/view', function (req, res, next) {
@@ -27,9 +43,7 @@ router.get('/view', function (req, res, next) {
       // Processed lectures
       var results = []
 
-      for (var i = 0; i < lectures.length; i++) {
-        var lecture = lectures[i]
-
+      lectures.forEach(function (lecture) {
         var courseId = lecture.course
         Course.findById(courseId, function (err, course) {
           if (err) {
@@ -49,177 +63,164 @@ router.get('/view', function (req, res, next) {
               l.course_details = details
               l.formatted_date = dateConverter(l.date)
               results.push(l)
-              if (i === lectures.length) {
-                res.render('lectures', { title: 'Lectures', lectures: results, md: md })
-              }
             } else {
               res.status(500).end()
+            }
+            if (results.length === lectures.length) {
+              res.render('lectures', { title: 'Lectures', lectures: results, md: md })
             }
           }
         })
-      }
+      })
     }
-  })
-
-  /* GET lecture by object ID (mongo) */
-  router.get('/:id', function (req, res, next) {
-    var lectureId = req.params.id
-
-    mongoose.connect(config.dbstring)
-      .catch((err) => {
-        console.log('DB connection error', err)
-      })
-
-    Lecture.findById(lectureId, function (err, lecture) {
-      if (err) {
-        res.status(500).end()
-      } else {
-        if (lecture) {
-          var courseId = lecture.course
-          Course.findById(courseId, function (err, course) {
-            if (err) {
-              res.status(500).end()
-            } else {
-              if (course) {
-                var l = lecture.toObject()
-                var c = course.toObject()
-                var details = {
-                  _id: c._id,
-                  id: c.id,
-                  code: c.code,
-                  title: c.title,
-                  semester: c.semester
-                }
-                l.course_details = details
-                res.json(l)
-              } else {
-                var response = { success: false, message: 'No matching course was found' }
-                console.log(response)
-                res.json(response)
-              }
-            }
-          })
-        } else {
-          var response = { success: false, message: 'No matching lecture was found' }
-          console.log(response)
-          res.json(response)
-        }
-      }
-    })
-  })
-
-  /* GET lecture by object ID render */
-  router.get('/view/:id', function (req, res, next) {
-    var lectureId = req.params.id
-
-    mongoose.connect(config.dbstring)
-      .catch((err) => {
-        console.log('DB connection error', err)
-      })
-
-    Lecture.findById(lectureId, function (err, lecture) {
-      if (err) {
-        res.status(500).end()
-      } else {
-        if (lecture) {
-          var courseId = lecture.course
-          Course.findById(courseId, function (err, course) {
-            if (err) {
-              res.status(500).end()
-            } else {
-              if (course) {
-                var l = lecture.toObject()
-                var c = course.toObject()
-                var details = {
-                  _id: c._id,
-                  id: c.id,
-                  code: c.code,
-                  title: c.title,
-                  semester: c.semester
-                }
-                l.course_details = details
-
-                // Get the file containing the notes
-                var fs = require('fs')
-                var path = require('path')
-                var dir = path.join(__dirname, '../')
-                var filePath = path.join(dir, l.filePath)
-
-                var notes = ''
-                var lectureDate = dateConverter(l.date)
-
-                fs.readFile(filePath, { encoding: 'utf-8' }, function (err, data) {
-                  if (err) { throw err }
-                  l.notes = data
-                  var title = `Lecture ${lectureDate} in ${l.course_details.id}`
-                  res.render('lecture', { title: title, lecture: l, notes: notes, md: md })
-                })
-              } else {
-                var response = { success: false, message: 'No matching course was found' }
-                console.log(response)
-                res.json(response)
-              }
-            }
-          })
-        } else {
-          var response = { success: false, message: 'No matching lecture was found' }
-          console.log(response)
-          res.json(response)
-        }
-      }
-    })
-  })
-
-  /* GET lectures */
-  router.get('/', function (req, res, next) {
-    mongoose.connect(config.dbstring)
-      .catch((err) => {
-        console.log('DB connection error', err)
-      })
-
-    Lecture.find({}, function (err, lectures) {
-      if (err) {
-        console.log({ success: false, message: 'An error occurred', err })
-        res.json({ success: false, message: 'An error occurred while connecting to the database', err })
-      } else {
-        res.json({ success: true, message: 'Successfully delivered all data', lectures: lectures })
-      }
-    })
   })
 })
 
-/* GET upload page. */
-router.get('/notes', function (req, res, next) {
-  console.log('reached here')
+/* GET lecture by object ID (mongo) */
+router.get('/:id', function (req, res, next) {
+  var lectureId = req.params.id
+
   mongoose.connect(config.dbstring)
     .catch((err) => {
       console.log('DB connection error', err)
     })
 
-  Course.find({}, function (err, courses) {
+  Lecture.findById(lectureId, function (err, lecture) {
+    if (err) {
+      res.status(500).end()
+    } else {
+      if (lecture) {
+        var courseId = lecture.course
+        Course.findById(courseId, function (err, course) {
+          if (err) {
+            res.status(500).end()
+          } else {
+            if (course) {
+              var l = lecture.toObject()
+              var c = course.toObject()
+              var details = {
+                _id: c._id,
+                id: c.id,
+                code: c.code,
+                title: c.title,
+                semester: c.semester
+              }
+              l.course_details = details
+              res.json(l)
+            } else {
+              var response = { success: false, message: 'No matching course was found' }
+              console.log(response)
+              res.json(response)
+            }
+          }
+        })
+      } else {
+        var response = { success: false, message: 'No matching lecture was found' }
+        console.log(response)
+        res.json(response)
+      }
+    }
+  })
+})
+
+/* GET lecture by object ID render */
+router.get('/view/:id', function (req, res, next) {
+  var lectureId = req.params.id
+
+  mongoose.connect(config.dbstring)
+    .catch((err) => {
+      console.log('DB connection error', err)
+    })
+
+  Lecture.findById(lectureId, function (err, lecture) {
+    if (err) {
+      res.status(500).end()
+    } else {
+      if (lecture) {
+        var courseId = lecture.course
+        Course.findById(courseId, function (err, course) {
+          if (err) {
+            res.status(500).end()
+          } else {
+            if (course) {
+              var l = lecture.toObject()
+              var c = course.toObject()
+              var details = {
+                _id: c._id,
+                id: c.id,
+                code: c.code,
+                title: c.title,
+                semester: c.semester
+              }
+              l.course_details = details
+
+              // Get the file containing the notes
+              var fs = require('fs')
+              var path = require('path')
+              var dir = path.join(__dirname, '../')
+              var filePath = path.join(dir, l.filePath)
+
+              var notes = ''
+              var lectureDate = dateConverter(l.date)
+
+              fs.readFile(filePath, { encoding: 'utf-8' }, function (err, data) {
+                if (err) { throw err }
+                l.notes = data
+                var title = `Lecture ${lectureDate} in ${l.course_details.id}`
+                res.render('lecture', { title: title, lecture: l, notes: notes, md: md })
+              })
+            } else {
+              var response = { success: false, message: 'No matching course was found' }
+              console.log(response)
+              res.json(response)
+            }
+          }
+        })
+      } else {
+        var response = { success: false, message: 'No matching lecture was found' }
+        console.log(response)
+        res.json(response)
+      }
+    }
+  })
+})
+
+/* GET lectures */
+router.get('/', function (req, res, next) {
+  mongoose.connect(config.dbstring)
+    .catch((err) => {
+      console.log('DB connection error', err)
+    })
+
+  Lecture.find({}, function (err, lectures) {
     if (err) {
       console.log({ success: false, message: 'An error occurred', err })
       res.json({ success: false, message: 'An error occurred while connecting to the database', err })
     } else {
-      res.render('upload', { title: 'Upload Notes', courses: courses })
+      res.json({ success: true, message: 'Successfully delivered all data', lectures: lectures })
     }
   })
 })
 
 /* POST Add lecture */
+var multer = require('multer')
 var fileUpload = multer({ dest: 'public/notes/' })
-router.post('/', fileUpload.single('file'), function (req, res, next) {
-  // Todo: Add filetype validation
+router.post('/upload', fileUpload.single('file'), function (req, res) {
   var file = req.file
-  if (file) {
+  var allowed = config.fileTypes
+
+  if (file && allowed.includes(file.mimetype)) {
     var fs = require('fs')
     var readline = require('readline')
+    var path = require('path')
 
     var _courseId = req.body.course
     var date = req.body.date ? req.body.date : new Date()
     var title = req.body.title
     var preview = req.body.preview
-    var filePath = req.file.path
+
+    var parentFolder = path.join(__dirname, '../')
+    var filePath = path.join(parentFolder, file.path)
 
     if (!title || !preview) {
       fs.readFile(filePath, { encoding: 'utf-8' }, function (err, data) {
@@ -242,7 +243,7 @@ router.post('/', fileUpload.single('file'), function (req, res, next) {
           }
           if (!preview) {
             rd.on('line', function (line) {
-              if ((!line.substring('#')) && (!line.substring('-')) && (!line.substring('['))) {
+              if (!line.substring('#') && !line.substring('-') && !line.substring('[')) {
                 var i = 0
                 if (i < 0) {
                   console.log('CHOICE')
@@ -274,7 +275,7 @@ router.post('/', fileUpload.single('file'), function (req, res, next) {
           var NewLecture = new Lecture({
             course: _courseId,
             date: date,
-            filePath: filePath,
+            filePath: file.path,
             title: title,
             preview: preview
           })
@@ -289,8 +290,8 @@ router.post('/', fileUpload.single('file'), function (req, res, next) {
       }
     })
   } else {
-    console.log({ success: false, message: 'Missing file' })
-    res.json({ success: false, message: 'Missing file' })
+    console.log({ success: false, message: 'Missing file or wrong file type' })
+    res.json({ success: false, message: 'Missing file or wrong file type' })
   }
 })
 
