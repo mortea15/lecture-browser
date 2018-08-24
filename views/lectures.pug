@@ -12,10 +12,10 @@ append content
     if lectures
       for lecture, i in lectures
         if i == 0
-          +list-group-item('/lectures/' + lecture.course + '/' + lecture.id, 'true')
-            h4.list-group-item-heading=lecture.course + ' - ' + lecture.title + ' (' + lecture.date + ')'
+          +list-group-item('/lectures/view/' + lecture._id, 'true')
+            h4.list-group-item-heading=lecture.course_details.id + ' - ' + lecture.title + ' (' + lecture.formatted_date + ')'
             p.list-group-item-text=lecture.preview
         else
-          +list-group-item('/lectures/' + lecture.course + '/' + lecture.id)
-            h4.list-group-item-heading=lecture.course + ' - ' + lecture.title + ' (' + lecture.date + ')'
+          +list-group-item('/lectures/view/' + lecture._id)
+            h4.list-group-item-heading=lecture.course_details.id + ' - ' + lecture.title + ' (' + lecture.formatted_date + ')'
             p.list-group-item-text=lecture.preview
