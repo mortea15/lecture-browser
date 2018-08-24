@@ -6,10 +6,13 @@ include ../node_modules/pug-bootstrap/components/list-groups
 include ../node_modules/pug-bootstrap/components/icons
 
 append content
-  h4=lecture.course + ' - ' + lecture.date
+  h4=title
   if message
     h4(style='color:red') #{message}
-  div!=md(lecture.notes)
+  if lecture
+    p=lecture.id
+  if lecture.notes
+    div!=md(lecture.notes)
 
   br
   div
