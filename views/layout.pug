@@ -4,5 +4,6 @@ include ../node_modules/pug-bootstrap/components/navbar
 block content
   +navbar-fixed('Lecture Browser', 'inverse')
     +nav_item('/', active) Home
-    +nav_item('/courses') Courses
-    +nav_item('/lectures') Lectures
+    +nav_item('/courses/view') Courses
+    +nav_item('/lectures/view') Lectures
+    +nav_item('/lectures/upload') Upload
