@@ -3,12 +3,13 @@ module.exports = function (date) {
   var dateObject = new Date(date)
 
   // Months of the year
-  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  const months = [
+    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
     'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
   ]
   // Days of the week
   const weekDays = [
-    'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'
+    'Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'
   ]
 
   if (dateObject) {
