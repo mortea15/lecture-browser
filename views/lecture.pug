@@ -15,13 +15,21 @@ append content
     div!=md(lecture.notes)
 
   br
-  div
+  .navigation
     center
-      if lecture.id < 2
+      if !lecture.previous
         a(class='icon-btn', href='#')
-          +icon-btn('menu-left')
+          i(class="material-icons", style='font-size:35px;') navigate_before
       else
-        a(class='icon-btn', href=`/lectures/${lecture.course}/${lecture.id - 1}`)
-          +icon-btn('menu-left')
-      a(class='icon-btn', href=`/lectures/${lecture.course}/${lecture.id + 1}`)
-        +icon-btn('menu-right')
+        a(class='icon-btn', href=`/lectures/view/${lecture._id}`)
+          i(class="material-icons", style='font-size:35px;') navigate_before
+      if !lecture.next
+        a(class='icon-btn', href='#')
+          i(class="material-icons", style='font-size:35px;') navigate_next
+      else
+        a(class='icon-btn', href=`/lectures/view/${lecture._id}`)
+          i(class="action-button material-icons", style='font-size:35px;') navigate_next
+      br
+      br
+      a(class='icon-btn', href=`${lecture.filePath.replace('public', '')}`)
+        i(class="material-icons", style='font-size:35px;') cloud_download
