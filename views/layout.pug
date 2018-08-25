@@ -2,8 +2,9 @@ extends base
 include ../node_modules/pug-bootstrap/components/navbar
 
 block content
-  +navbar-fixed('Lecture Browser', 'inverse')
-    +nav_item('/', active) Home
-    +nav_item('/courses/view') Courses
-    +nav_item('/lectures/view') Lectures
-    +nav_item('/lectures/upload') Upload
+  content.nav
+    +navbar-fixed('Lecture Browser')
+      +nav_item('/', active) Home
+      +nav_item('/courses/view') Courses
+      +nav_item('/lectures/view') Lectures
+      +nav_item('/lectures/upload') Upload
