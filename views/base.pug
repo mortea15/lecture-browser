@@ -5,8 +5,9 @@ html
     title= title
     meta(name='viewport', content='width=device-width, initial-scale=1')
     styles
-      link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css', rel='stylesheet')
       link(href='/stylesheets/style.css', rel='stylesheet', type='text/css')
-  body
+      link(href='/stylesheets/bootstrap-custom.css', rel='stylesheet')
+      link(href='https://fonts.googleapis.com/icon?family=Material+Icons', rel='stylesheet')
+  body#base(class='base')
     div.container
       block content
