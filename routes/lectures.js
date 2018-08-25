@@ -62,12 +62,15 @@ router.get('/view', function (req, res, next) {
               }
               l.course_details = details
               l.formatted_date = dateConverter(l.date)
+
               results.push(l)
             } else {
               res.status(500).end()
             }
             if (results.length === lectures.length) {
-              res.render('lectures', { title: 'Lectures', lectures: results, md: md })
+              res.locals = res.locals ? res.locals : {}
+              res.locals.lectures = results
+              res.render('lectures', { title: 'Lectures', md: md })
             }
           }
         })
@@ -268,8 +271,7 @@ router.post('/upload', fileUpload.single('file'), function (req, res) {
 
     Course.findById(_courseId, function (err, course) {
       if (err) {
-        console.log({ success: false, message: 'An error occurred', err })
-        res.json({ success: false, message: 'An error occurred while connecting to the database', err })
+        res.json({ success: false, message: 'An error occurred while connecting to the database ' + err })
       } else {
         if (course) {
           var NewLecture = new Lecture({
@@ -286,11 +288,12 @@ router.post('/upload', fileUpload.single('file'), function (req, res) {
             .catch((err) => {
               console.log(err)
             })
+        } else {
+          res.json({ success: false, message: 'A course with that _id does not exist' })
         }
       }
     })
   } else {
-    console.log({ success: false, message: 'Missing file or wrong file type' })
     res.json({ success: false, message: 'Missing file or wrong file type' })
   }
 })
