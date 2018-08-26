@@ -85,14 +85,6 @@ router.get('/view', function (req, res, next) {
   })
 })
 
-/* GET lecture */
-router.get('/:course/:number', function (req, res, next) {
-  var courseId = req.params.course
-  var lectureId = req.params.number
-  var content = '# Introduction to stuff'
-  res.render('lecture', { title: 'Lecture' + lectureId, content: content, md: md })
-})
-
 /* GET courses */
 router.get('/', function (req, res, next) {
   mongoose.connect(config.dbstring)
@@ -111,11 +103,11 @@ router.get('/', function (req, res, next) {
 
 /* POST Add course */
 router.post('/', function (req, res, next) {
-  var id = req.body.id
-  var code = req.body.code
-  var title = req.body.title
-  var lectures = req.body.lectures
-  var semester = req.body.semester
+  const id = req.sanitize(req.body.id)
+  const code = req.sanitize(req.body.code)
+  const title = req.sanitize(req.body.title)
+  const lectures = req.sanitize(req.body.lectures)
+  const semester = req.sanitize(req.body.semester)
 
   mongoose.connect(config.dbstring)
     .catch((err) => {
