@@ -1,0 +1,17 @@
+extends layout
+
+include ../node_modules/pug-bootstrap/components/forms
+
+append content
+  h1=title
+  if message
+    h4(style='color:red') #{message}
+  br
+  form(method='POST', action='/user/auth', id='loginForm')
+
+  #form-group
+      input.text-input(type='text', name='username', form='loginForm', required, placeholder='Username..')
+      br
+      input.text-input(type='password', name='password', form='loginForm', required, placeholder='Password..')
+  br
+  input.btn.btn-info(type='submit', value='Log In', form='loginForm')
