@@ -56,6 +56,17 @@ typings/
 
 # dotenv environment variables file
 .env
+.envvars
+.env.list
 
 # next.js build output
 .next
+
+# cirrus CI
+.cirrus.yml
+
+# eslint
+.eslintrc.yml
+
+# uploads
+public/notes/*
