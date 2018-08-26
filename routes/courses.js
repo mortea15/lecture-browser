@@ -6,6 +6,65 @@ var mongoose = require('mongoose')
 const config = require('../config')
 const CourseSchema = require('../schemas/course')
 const Course = mongoose.model('Course', CourseSchema)
+const LectureSchema = require('../schemas/lecture')
+const Lecture = mongoose.model('Lecture', LectureSchema)
+
+var dateConverter = require('../helpers/dateconverter')
+
+/* GET courses listing. */
+router.get('/view', function (req, res, next) {
+  mongoose.connect(config.dbstring)
+    .catch((err) => {
+      console.log('DB connection error', err)
+    })
+
+  Course.find({}, function (err, courses) {
+    if (err) {
+      res.json({ success: false, message: 'An error occurred while connecting to the database', err })
+    } else {
+      var results = []
+
+      courses.forEach(function (course) {
+        var courseId = course._id
+        Lecture.find({ course: courseId }, function (err, lectures) {
+          if (err) {
+            console.log({ success: false, message: 'An error occurred', err })
+            res.json({ success: false, message: 'An error occurred while connecting to the database', err })
+          } else {
+            if (lectures) {
+              var r = []
+
+              var c = course.toObject()
+              var details = {
+                _id: c._id,
+                id: c.id,
+                code: c.code,
+                title: c.title,
+                semester: c.semester
+              }
+
+              lectures.forEach(function (lecture) {
+                var l = lecture.toObject()
+                l.formatted_date = dateConverter(l.date)
+                l.course_details = details
+                r.push(l)
+              })
+              c.lectures = r
+              results.push(c)
+              if (results.length === courses.length) {
+                res.locals = res.locals ? res.locals : {}
+                res.locals.courses = results
+                res.render('courses', { title: 'Courses', md: md })
+              }
+            } else {
+              res.status(500).end()
+            }
+          }
+        })
+      })
+    }
+  })
+})
 
 /* GET lectures listing. */
 router.get('/view', function (req, res, next) {
