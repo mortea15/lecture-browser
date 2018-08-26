@@ -2,6 +2,7 @@ var mongoose = require('mongoose')
 
 module.exports = new mongoose.Schema({
   username: String,
+  email: String,
   password: String,
   admin: {
     type: Boolean,
