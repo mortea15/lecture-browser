@@ -21,8 +21,8 @@ router.get('/logout', function (req, res, next) {
 })
 
 router.post('/auth', function (req, res) {
-  var username = req.body.username
-  var password = req.body.password
+  const username = req.sanitize(req.body.username)
+  const password = req.sanitize(req.body.password)
 
   mongoose.connect(config.dbstring)
     .catch((err) => {
@@ -61,7 +61,7 @@ router.post('/auth', function (req, res) {
 })
 
 router.post('/auth/verify', function (req, res) {
-  var token = req.body.token
+  var token = req.sanitize(req.body.token)
   jwt.verify(token, config.appsecret, function (err, decoded) {
     if (err) {
       res.json({ success: false, message: 'Invalid token' })
@@ -76,9 +76,10 @@ router.get('/register', function (req, res) {
 })
 
 router.post('/auth/register', function (req, res) {
-  var username = req.body.username
-  var password = req.body.password
-  var passwordConf = req.body.password2
+  const username = req.sanitize(req.body.username)
+  const email = req.sanitize(req.body.email)
+  const password = req.sanitize(req.body.password)
+  const passwordConf = req.sanitize(req.body.password2)
 
   if (username && password && passwordConf) {
     if (password !== passwordConf) {
@@ -96,6 +97,7 @@ router.post('/auth/register', function (req, res) {
             var pwHash = bcrypt.hashSync(password, 8)
             const NewUser = new User({
               username: username,
+              email: email,
               password: pwHash
             })
             NewUser.save()
