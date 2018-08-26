@@ -1,8 +1,8 @@
-var mongoose = require('mongoose');
+var mongoose = require('mongoose')
 
 var LogSchema = new mongoose.Schema({
-    source: String, // frontend, backend, database
-    message: String
-}, { timestamps: true });
+  source: String, // frontend, backend, database
+  message: String
+}, { timestamps: true })
 
-module.exports = LogSchema;
+module.exports = LogSchema
