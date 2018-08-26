@@ -78,7 +78,7 @@ router.get('/view', function (req, res, next) {
 
 /* GET lecture by object ID (mongo) */
 router.get('/:id', function (req, res, next) {
-  var lectureId = req.params.id
+  const lectureId = req.sanitize(req.params.id)
 
   mongoose.connect(config.dbstring)
     .catch((err) => {
@@ -123,7 +123,7 @@ router.get('/:id', function (req, res, next) {
 
 /* GET lecture by object ID render */
 router.get('/view/:id', function (req, res, next) {
-  var lectureId = req.params.id
+  var lectureId = req.sanitize(req.params.id)
 
   mongoose.connect(config.dbstring)
     .catch((err) => {
