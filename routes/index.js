@@ -6,7 +6,7 @@ router.get('/', function (req, res, next) {
   if (req.session.token) {
     res.redirect('/courses/view')
   } else {
-    res.render('index', { title: 'Lecture Board' })
+    res.render('index', { title: 'Lecture Browser' })
   }
 })
 
