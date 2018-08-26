@@ -4,6 +4,9 @@ var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 const session = require('express-session')
+const expressSanitizer = require('express-sanitizer')
+const compression = require('compression')
+const helmet = require('helmet')
 
 var indexRouter = require('./routes/index')
 var coursesRouter = require('./routes/courses')
@@ -11,6 +14,7 @@ var lecturesRouter = require('./routes/lectures')
 var userRouter = require('./routes/user')
 
 const isAuthenticated = require('./helpers/isAuthenticated')
+const config = require('./config')
 
 var app = express()
 
@@ -41,9 +45,13 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 app.use(session(sess))
+app.use(expressSanitizer())
+app.use(compression())
+app.use(helmet())
 
 app.get('*', function (req, res, next) {
   res.locals.token = req.session.token || null
+  res.locals.appname = config.appname
   next()
 })
 
