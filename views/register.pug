@@ -8,14 +8,17 @@ append content
     h4(style='color:red') #{message}
   br
   form(method='POST', action='/user/auth/register', id='registerForm')
-
+  .authForm
     #form-group
-      input.text-input(type='text', name='username', form='registerForm', required, placeholder='Username..')
+      input.form-control(type='text', name='username', form='registerForm', required, placeholder='Username..')
     br
     #form-group
-      input.text-input(type='password', name='password', form='registerForm', required, placeholder='Password..')
+      input.form-control(type='text', name='email', form='registerForm', required, placeholder='Email..')
     br
     #form-group
-      input.text-input(type='password', name='password2', form='registerForm', required, placeholder='Confirm password..')
+      input.form-control(type='password', name='password', form='registerForm', required, placeholder='Password..')
+    br
+    #form-group
+      input.form-control(type='password', name='password2', form='registerForm', required, placeholder='Confirm password..')
     br
     input.btn.btn-info(type='submit', value='Register', form='registerForm')

@@ -8,10 +8,11 @@ append content
     h4(style='color:red') #{message}
   br
   form(method='POST', action='/user/auth', id='loginForm')
-
-  #form-group
-      input.text-input(type='text', name='username', form='loginForm', required, placeholder='Username..')
-      br
-      input.text-input(type='password', name='password', form='loginForm', required, placeholder='Password..')
+  .authForm
+    #form-group
+      input.form-control(name='username', type='text', form='loginForm', required, placeholder='Username..')
+    br
+    #form-group
+      input.form-control(name='password', type='password', form='loginForm', required, placeholder='Password..')
   br
   input.btn.btn-info(type='submit', value='Log In', form='loginForm')
