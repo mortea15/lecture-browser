@@ -28,7 +28,6 @@ router.get('/view', function (req, res, next) {
         var courseId = course._id
         Lecture.find({ course: courseId }, function (err, lectures) {
           if (err) {
-            console.log({ success: false, message: 'An error occurred', err })
             res.json({ success: false, message: 'An error occurred while connecting to the database', err })
           } else {
             if (lectures) {
@@ -75,7 +74,6 @@ router.get('/view', function (req, res, next) {
 
   Course.find({}, function (err, courses) {
     if (err) {
-      console.log({ success: false, message: 'An error occurred', err })
       res.json({ success: false, message: 'An error occurred while connecting to the database', err })
     } else {
       var courseNames = []
@@ -104,7 +102,6 @@ router.get('/', function (req, res, next) {
 
   Course.find({}, function (err, courses) {
     if (err) {
-      console.log({ success: false, message: 'An error occurred', err })
       res.json({ success: false, message: 'An error occurred while connecting to the database', err })
     } else {
       res.json({ success: true, message: 'Successfully delivered all data', courses: courses })
@@ -127,7 +124,6 @@ router.post('/', function (req, res, next) {
 
   Course.findOne({ code: code }, function (err, course) {
     if (err) {
-      console.log({ success: false, message: 'An error occurred', err })
       res.json({ success: false, message: 'An error occurred while connecting to the database', err })
     } else {
       if (!course) {
