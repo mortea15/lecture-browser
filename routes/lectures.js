@@ -20,7 +20,6 @@ router.get('/upload', function (req, res, next) {
 
   Course.find({}, function (err, courses) {
     if (err) {
-      console.log({ success: false, message: 'An error occurred', err })
       res.json({ success: false, message: 'An error occurred while connecting to the database', err })
     } else {
       res.render('upload', { title: 'Upload Notes', courses: courses })
@@ -37,7 +36,6 @@ router.get('/view', function (req, res, next) {
 
   Lecture.find({}, function (err, lectures) {
     if (err) {
-      console.log({ success: false, message: 'An error occurred', err })
       res.json({ success: false, message: 'An error occurred while connecting to the database', err })
     } else {
       // Processed lectures
@@ -47,7 +45,6 @@ router.get('/view', function (req, res, next) {
         var courseId = lecture.course
         Course.findById(courseId, function (err, course) {
           if (err) {
-            console.log({ success: false, message: 'An error occurred', err })
             res.json({ success: false, message: 'An error occurred while connecting to the database', err })
           } else {
             if (course) {
@@ -112,14 +109,12 @@ router.get('/:id', function (req, res, next) {
               res.json(l)
             } else {
               var response = { success: false, message: 'No matching course was found' }
-              console.log(response)
               res.json(response)
             }
           }
         })
       } else {
         var response = { success: false, message: 'No matching lecture was found' }
-        console.log(response)
         res.json(response)
       }
     }
@@ -174,14 +169,12 @@ router.get('/view/:id', function (req, res, next) {
               })
             } else {
               var response = { success: false, message: 'No matching course was found' }
-              console.log(response)
               res.json(response)
             }
           }
         })
       } else {
         var response = { success: false, message: 'No matching lecture was found' }
-        console.log(response)
         res.json(response)
       }
     }
@@ -197,7 +190,6 @@ router.get('/', function (req, res, next) {
 
   Lecture.find({}, function (err, lectures) {
     if (err) {
-      console.log({ success: false, message: 'An error occurred', err })
       res.json({ success: false, message: 'An error occurred while connecting to the database', err })
     } else {
       res.json({ success: true, message: 'Successfully delivered all data', lectures: lectures })
@@ -249,8 +241,6 @@ router.post('/upload', fileUpload.single('file'), function (req, res) {
               if (!line.substring('#') && !line.substring('-') && !line.substring('[')) {
                 var i = 0
                 if (i < 0) {
-                  console.log('CHOICE')
-                  console.log(line)
                   preview = line
                   i++
                   rd.close()
