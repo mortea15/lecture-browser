@@ -1,0 +1,24 @@
+extends layout
+
+include ../node_modules/pug-bootstrap/components/forms
+
+append content
+  h1=title
+  if message
+    h4(style='color:red') #{message}
+  br
+  form(method='POST', action='/user/auth/register', id='registerForm')
+  .authForm
+    #form-group
+      input.form-control(type='text', name='username', form='registerForm', required, placeholder='Username..')
+    br
+    #form-group
+      input.form-control(type='text', name='email', form='registerForm', required, placeholder='Email..')
+    br
+    #form-group
+      input.form-control(type='password', name='password', form='registerForm', required, placeholder='Password..')
+    br
+    #form-group
+      input.form-control(type='password', name='password2', form='registerForm', required, placeholder='Confirm password..')
+    br
+    input.btn.btn-info(type='submit', value='Register', form='registerForm')

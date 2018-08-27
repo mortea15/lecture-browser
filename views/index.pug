@@ -1,5 +1,11 @@
 extends layout
 
-block content
+append content
+  br
   h1= title
   p Welcome to #{title}
+  p
+    a(href='/user/login') Log In 
+    | or 
+    a(href='/user/register') Create an account 
+    | to start browsing courses and lectures

@@ -1,7 +1,15 @@
-doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+extends base
+include ../node_modules/pug-bootstrap/components/navbar
+
+block content
+  content.nav
+    +navbar-fixed(appname)
+      if token
+        +nav_item('/courses/view') Courses
+        +nav_item('/lectures/view') Lectures
+        +nav_item('/lectures/upload') Upload
+        +nav_item('/user/logout') Log Out
+      else
+        +nav_item('/', active) Home
+        +nav_item('/user/login') Log In
+        +nav_item('/user/register') Register

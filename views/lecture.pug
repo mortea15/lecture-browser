@@ -1,0 +1,35 @@
+extends layout
+
+include ../node_modules/pug-bootstrap/components/tabs
+include ../node_modules/pug-bootstrap/components/forms
+include ../node_modules/pug-bootstrap/components/list-groups
+include ../node_modules/pug-bootstrap/components/icons
+
+append content
+  h4=title
+  if message
+    h4(style='color:red') #{message}
+  if lecture
+    p=lecture.id
+  if lecture.notes
+    div!=md(lecture.notes)
+
+  br
+  .navigation
+    center
+      if !lecture.previous
+        a(class='icon-btn', href='#')
+          i(class="material-icons", style='font-size:35px;') navigate_before
+      else
+        a(class='icon-btn', href=`/lectures/view/${lecture._id}`)
+          i(class="material-icons", style='font-size:35px;') navigate_before
+      if !lecture.next
+        a(class='icon-btn', href='#')
+          i(class="material-icons", style='font-size:35px;') navigate_next
+      else
+        a(class='icon-btn', href=`/lectures/view/${lecture._id}`)
+          i(class="action-button material-icons", style='font-size:35px;') navigate_next
+      br
+      br
+      a(class='icon-btn', href=`${lecture.filePath.replace('public', '')}`)
+        i(class="material-icons", style='font-size:35px;') cloud_download
