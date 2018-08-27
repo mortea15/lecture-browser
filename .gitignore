@@ -62,19 +62,11 @@ typings/
 # next.js build output
 .next
 
-<<<<<<< HEAD
-# cirrus CI
-.cirrus.yml
-
-# eslint
-.eslintrc.yml
-
-# uploads
-public/notes/*
-=======
 # linters
 .eslintrc.yml
 
 # uploads
 public/notes/
->>>>>>> 57b1693018cef3e14fd044896519dedaf3230d97
+
+# cirrus
+.cirrus.yml
