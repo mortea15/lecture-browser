@@ -1,11 +1,15 @@
 {
   "name": "lecture-browser",
-  "version": "0.0.1",
-  "private": true,
+  "version": "0.0.2",
+  "private": false,
   "scripts": {
     "start": "nodemon ./bin/www",
     "test": "mocha"
   },
+  "description": "Lecture Browser, an Express app used to manage lecture notes for courses",
+  "keywords": ["lecturebrowser", "education"],
+  "homepage": "https://github.com/mortea15/lecture-browser",
+  "license": "GPL-3.0",
   "dependencies": {
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
