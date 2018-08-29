@@ -16,7 +16,7 @@ append content
           +list-group-custom()
               if course.lectures
                 for lecture in course.lectures
-                  +list-group-item('/lectures/view/' + lecture._id)
+                  +list-group-item(`/lectures/${lecture._id}/view`)
                     h4.list-group-item-heading=lecture.title + ' (' + lecture.formatted_date + ')'
                     p.list-group-item-text=lecture.preview
       br
