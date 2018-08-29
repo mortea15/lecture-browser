@@ -252,6 +252,7 @@ router.post('/save', function (req, res, next) {
 
   // Params
   const course = req.sanitize(req.body.course)
+  const originalCourse = req.sanitize(req.body.originalCourse)
   const content = req.sanitize(req.body.content)
   const lectureId = req.sanitize(req.body.lectureId)
   const filePath = req.sanitize(req.body.filePath)
@@ -261,6 +262,19 @@ router.post('/save', function (req, res, next) {
   const fullPath = path.join(parentFolder, filePath)
 
   if (course && content && lectureId) {
+    if (course !== originalCourse) {
+      var updatedLecture = {
+        course: course
+      }
+      Lecture.findByIdAndUpdate(lectureId, { $set: updatedLecture }, function (err, lecture) {
+        if (err) {
+          res.status(404).send()
+          throw (err)
+        } else {
+          console.log(`Lecture updated with Course ID ${course} (Old: ${originalCourse})`)
+        }
+      })
+    }
     fs.writeFile(fullPath, content, 'utf-8', function (err) {
       if (err) throw err
       console.log(content.substring(0, 15))
