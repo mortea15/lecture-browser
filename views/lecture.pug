@@ -7,10 +7,11 @@ include ../node_modules/pug-bootstrap/components/icons
 
 append content
   h4=title
+    | 
+    a(class='icon-btn', href=`/lectures/${lecture._id}/edit`)
+      i(class="material-icons", style='font-size:22px;') edit
   if message
     h4(style='color:red') #{message}
-  if lecture
-    p=lecture.id
   if lecture.notes
     div!=md(lecture.notes)
 
@@ -21,15 +22,15 @@ append content
         a(class='icon-btn', href='#')
           i(class="material-icons", style='font-size:35px;') navigate_before
       else
-        a(class='icon-btn', href=`/lectures/view/${lecture._id}`)
+        a(class='icon-btn', href=`/lectures/${lecture._id}/view`)
           i(class="material-icons", style='font-size:35px;') navigate_before
       if !lecture.next
         a(class='icon-btn', href='#')
           i(class="material-icons", style='font-size:35px;') navigate_next
       else
-        a(class='icon-btn', href=`/lectures/view/${lecture._id}`)
+        a(class='icon-btn', href=`/lectures/${lecture._id}/view`)
           i(class="action-button material-icons", style='font-size:35px;') navigate_next
       br
       br
       a(class='icon-btn', href=`${lecture.filePath.replace('public', '')}`)
-        i(class="material-icons", style='font-size:35px;') cloud_download
+        i(class="material-icons", style='font-size:30px;') cloud_download
