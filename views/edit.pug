@@ -16,7 +16,7 @@ append content
     #form-group
       label(for='course') Course
       br
-      select(name='course', form='editForm', required)
+      select#courseSelector(name='course', form='editForm', required)
         each course in courses
           option(value=course._id)=course.id + ' - ' + course.title
   br
@@ -25,6 +25,8 @@ append content
       input(type='hidden', name='lectureId', id='lectureId', form='editForm')
     if lecture.filePath
       input(type='hidden', name='filePath', id='filePath', form='editForm')
+    if lecture.course
+      input(type='hidden', name='originalCourse', id='originalCourse', form='editForm')
     .editbox
       textarea.form-control(class='editFile', name='content', type='text', form='editForm', required)= lecture.notes
   br
@@ -38,6 +40,21 @@ append content
       var lectureId = document.getElementById('lectureId')
       lectureId.setAttribute('value', id)
 
+      var courseId='#{lecture.course}'
+      var originalCourse = document.getElementById('originalCourse')
+      originalCourse.setAttribute('value', courseId)
+
       var path='#{lecture.filePath}'
       var filePath = document.getElementById('filePath')
       filePath.setAttribute('value', path)
+
+  script.
+    var id='#{lecture.course}'
+    var selector = document.getElementById('courseSelector')
+    var options = selector.options
+    for (var i = 0; i < options.length; i++) {
+      var option = options[i]
+      if (option.value === id) {
+        selector.selectedIndex = option.index
+      }
+    }
