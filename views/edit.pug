@@ -28,7 +28,10 @@ append content
     .editbox
       textarea.form-control(class='editFile', name='content', type='text', form='editForm', required)= lecture.notes
   br
-  input.btn.btn-primary(type='submit', value='Save', form='editForm')
+  input.btn.btn-primary(style='margin-right: 10px;', type='submit', value='Save', form='editForm')
+  |
+  a(href=`/lectures/${lecture._id}/view`)
+    input.btn.btn(type='submit', value='Cancel')
 
   script.
       var id='#{lecture._id}'
