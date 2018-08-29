@@ -3181,7 +3181,9 @@ fieldset[disabled] .form-control {
 }
 
 textarea.form-control {
-    height: auto
+    height: 800px;
+    color: white;
+    background-color: #404040;
 }
 
 input[type=search] {
